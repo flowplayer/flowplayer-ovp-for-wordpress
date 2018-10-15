@@ -1,0 +1,14 @@
+{
+    "name": "flowplayer/flowplayer-ovp",
+    "description": "Flowplayer OVP integration for WordPress",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0+",
+    "authors": [
+        {
+            "name": "Janne Ala-Äijälä",
+            "email": "janne.ala-aijala@flowplayer.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
