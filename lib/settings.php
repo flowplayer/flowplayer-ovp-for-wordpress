@@ -48,7 +48,7 @@ add_action( 'admin_init', 'flowplayer_ovp_settings_init' );
 function flowplayer_ovp_settings_field_render( $args ) {
 	$options = get_option( 'flowplayer_ovp_settings' );
 	$field_id = $args['field_id'];
-	$defval = array_key_exists($field_id, $options) ? $options[$field_id] : '';
+	$defval = is_array($options) && array_key_exists($field_id, $options) ? $options[$field_id] : '';
 	?>
 	<input type='text' class="regular-text" name='flowplayer_ovp_settings[<?php print $field_id; ?>]' value='<?php echo $defval; ?>'>
 	<?php
