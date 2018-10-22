@@ -66,23 +66,44 @@ wp.media.view.MediaFrame.Post = defaultMediaFrame.extend({
 			var controller = this;
 
 			browser.listenTo(selection, 'selection:single', function() {
-				controller.createFpSettings(browser);
+				controller.createFpSidebar(browser);
 			});
 
 			if(selection.length) {
-				controller.createFpSettings(browser);
+				controller.createFpSidebar(browser);
 			}
 		}
 	},
 
-	createFpSettings: function(browser) {
+	createFpSidebar: function(browser) {
+		var FlowplayerDetails = wp.media.View.extend({
+			tagName:   'div',
+			className: 'attachment-details',
+			template:  wp.template('flowplayer-display-details'),
+
+			render: function() {
+				this.views.detach();
+				this.$el.html( this.template( this.model.toJSON() ) );
+				this.views.render();
+
+				return this;
+			},
+
+		});
+
 		var FlowplayerSettings = wp.media.view.Settings.extend({
-			className: 'flowplayer-display-settings',
+			className: 'attachment-display-settings',
 			template:  wp.template('flowplayer-display-settings'),
 		});
 
+		browser.sidebar.unset('details');
+
 		browser.sidebar.set({
-			'flowplayer':	new FlowplayerSettings({
+			'flowplayer-details': new FlowplayerDetails({
+				priority: 40,
+				model: browser.options.selection.single(),
+			}),
+			'flowplayer-settings':	new FlowplayerSettings({
 				priority: 120,
 				players: this.players,
 				model: this.playerSettings,
