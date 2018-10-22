@@ -16,7 +16,7 @@ wp.media.view.MediaFrame.Post = defaultMediaFrame.extend({
 			router:     'empty',
 			toolbar:    'flowplayer',
 			filterable: false,
-			searchable: false,
+			searchable: true,
 			date:       false,
 			selection:  false,
 			multiple:   false,

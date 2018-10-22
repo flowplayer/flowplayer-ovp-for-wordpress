@@ -5,17 +5,25 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 function flowplayer_ovp_query_attachments( $args ) {
-	if (isset($_REQUEST['query']['flowplayer'])) {
+	if ( isset( $_REQUEST['query']['flowplayer'] ) ) {
 		$settings = flowplayer_ovp_get_settings();
 
 		// Fetch attachments
+		$query = array(
+			'api_key'   => $settings['api_key'],
+			'page_size' => filter_var($_REQUEST['query']['posts_per_page'], FILTER_SANITIZE_NUMBER_INT),
+			'page'      => filter_var($_REQUEST['query']['paged'], FILTER_SANITIZE_NUMBER_INT),
+		);
+
+		if ( isset($_REQUEST['query']['s'] ) ) {
+			$query['search'] = urlencode( sanitize_text_field( $_REQUEST['query']['s'] ) );
+		}
+
 		$request = wp_remote_get(
 			sprintf(
-				'https://api.flowplayer.com/ovp/web/video/v2/site/%s.json?api_key=%s&page_size=%s&page=%s',
+				'https://api.flowplayer.com/ovp/web/video/v2/site/%s.json?%s',
 				$settings['site_id'],
-				$settings['api_key'],
-				filter_var($_REQUEST['query']['posts_per_page'], FILTER_SANITIZE_NUMBER_INT),
-				filter_var($_REQUEST['query']['paged'], FILTER_SANITIZE_NUMBER_INT)
+				build_query($query)
 			)
 		);
 
