@@ -1,5 +1,6 @@
 <?php
 /**
+ * Flowplayer OVP WordPress plugin
  *
  * @package   Flowplayer OVP
  * @author    Janne Ala-Äijälä <janne.ala-aijala@flowplayer.com>

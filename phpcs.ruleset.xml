@@ -7,6 +7,12 @@
 	<description>A custom set of code standard rules to check for Flowplayer OVP.</description>
 
 	<!-- Include the WordPress ruleset, with exclusions. -->
-	<rule ref="WordPress-Core" />
-	<rule ref="WordPress-Docs" />
+	<rule ref="WordPress-Core">
+		<exclude name="WordPress.PHP.YodaConditions" />
+	</rule>
+	<rule ref="WordPress-Docs">
+		<exclude name="Squiz.Commenting.FileComment.Missing" />
+		<exclude name="Squiz.Commenting.FunctionComment.MissingParamTag" />
+	</rule>
+
 </ruleset>

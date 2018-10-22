@@ -4,11 +4,13 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-// Enqueue admin js
+/**
+ * Enqueue admin js
+ */
 function flowplayer_ovp_scripts() {
 	$settings = flowplayer_ovp_get_settings();
 
-	if($settings['site_id'] !== '') {
+	if ( $settings['site_id'] !== '' ) {
 		wp_enqueue_script(
 			'flowplayer-ovp-js',
 			plugin_dir_url( dirname( __FILE__ ) ) . 'js/admin.js',
@@ -20,7 +22,9 @@ function flowplayer_ovp_scripts() {
 }
 add_action( 'print_media_templates', 'flowplayer_ovp_scripts' );
 
-// Enqueue extra admin templates
+/**
+ * Enqueue extra admin templates
+ */
 function flowplayer_ovp_print_media_templates() {
 	$players = flowplayer_ovp_fetch_players();
 	?>
@@ -34,7 +38,7 @@ function flowplayer_ovp_print_media_templates() {
 			>
 				<# _.each(data.players, function(label, id) { #>
 					<option value="{{ id }}">{{ label }}</option>
-        <# }); #>
+				<# }); #>
 			</select>
 		</label>
 

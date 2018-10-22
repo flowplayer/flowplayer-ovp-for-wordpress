@@ -4,18 +4,21 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
+/**
+ * Parse ajax queries
+ */
 function flowplayer_ovp_query_attachments( $args ) {
 	if ( isset( $_REQUEST['query']['flowplayer'] ) ) {
 		$settings = flowplayer_ovp_get_settings();
 
-		// Fetch attachments
+		// Fetch attachments.
 		$query = array(
 			'api_key'   => $settings['api_key'],
-			'page_size' => filter_var($_REQUEST['query']['posts_per_page'], FILTER_SANITIZE_NUMBER_INT),
-			'page'      => filter_var($_REQUEST['query']['paged'], FILTER_SANITIZE_NUMBER_INT),
+			'page_size' => filter_var( $_REQUEST['query']['posts_per_page'], FILTER_SANITIZE_NUMBER_INT ),
+			'page'      => filter_var( $_REQUEST['query']['paged'], FILTER_SANITIZE_NUMBER_INT ),
 		);
 
-		if ( isset($_REQUEST['query']['s'] ) ) {
+		if ( isset( $_REQUEST['query']['s'] ) ) {
 			$query['search'] = urlencode( sanitize_text_field( $_REQUEST['query']['s'] ) );
 		}
 
@@ -23,66 +26,75 @@ function flowplayer_ovp_query_attachments( $args ) {
 			sprintf(
 				'https://api.flowplayer.com/ovp/web/video/v2/site/%s.json?%s',
 				$settings['site_id'],
-				build_query($query)
+				build_query( $query )
 			)
 		);
 
-    if( is_wp_error( $request ) ) {
-      return false; // Bail early
-    }
-    $body = wp_remote_retrieve_body( $request );
+		if ( is_wp_error( $request ) ) {
+			return false; // Bail early.
+		}
+		$body = wp_remote_retrieve_body( $request );
 		$data = json_decode( $body );
 
-		// Map attachments to expected format
-		$videos = array_map('flowplayer_ovp_video_to_media_attachment', $data->videos);
+		// Map attachments to expected format.
+		$videos = array_map( 'flowplayer_ovp_video_to_media_attachment', $data->videos );
 
-		wp_send_json_success($videos);
+		wp_send_json_success( $videos );
 	}
 
 	return $args;
 }
-add_filter( 'ajax_query_attachments_args', 'flowplayer_ovp_query_attachments', 99);
+add_filter( 'ajax_query_attachments_args', 'flowplayer_ovp_query_attachments', 99 );
 
+/**
+ * Convert OVP API response video entity to WordPress attachment
+ */
 function flowplayer_ovp_video_to_media_attachment( $video ) {
 	return array(
-			'type'				=> 'remote',
-			'id'          => $video->id,
-			'title'       => $video->name,
-			'filename'    => $video->name,
-			'url'         => sprintf(
-				'https://play.flowplayer.com/api/video/embed.jsp?id=%s',
-				$video->id
-			),
-			'link'        => false,
-			'alt'         => $video->name,
-			'author'      => '',
-			'description' => $video->description,
-			'caption'     => '',
-			'name'        => $video->name,
-			'status'      => 'inherit',
-			'uploadedTo'  => 0,
-			'date'        => strtotime($video->created_at) * 1000,
-			'modified'    => strtotime($video->created_at) * 1000,
-			'menuOrder'   => 0,
-			'mime'        => 'remote/flowplayer',
-			'subtype'     => "flowplayer",
-			'icon'        => $video->images->thumbnail_url,
-			'dateFormatted' => mysql2date(get_option('date_format'), $video->created_at),
-			'nonces'      => array(
-					'update' => false,
-					'delete' => false,
-			),
-			'editLink'   => false,
+		'type'          => 'remote',
+		'id'            => $video->id,
+		'title'         => $video->name,
+		'filename'      => $video->name,
+		'url'           => sprintf(
+			'https://play.flowplayer.com/api/video/embed.jsp?id=%s',
+			$video->id
+		),
+		'link'          => false,
+		'alt'           => $video->name,
+		'author'        => '',
+		'description'   => $video->description,
+		'caption'       => '',
+		'name'          => $video->name,
+		'status'        => 'inherit',
+		'uploadedTo'    => 0,
+		'date'          => strtotime( $video->created_at ) * 1000,
+		'modified'      => strtotime( $video->created_at ) * 1000,
+		'menuOrder'     => 0,
+		'mime'          => 'remote/flowplayer',
+		'subtype'       => 'flowplayer',
+		'icon'          => $video->images->thumbnail_url,
+		'dateFormatted' => mysql2date( get_option( 'date_format' ), $video->created_at ),
+		'editLink'      => false,
+		'nonces'        => array(
+			'update' => false,
+			'delete' => false,
+		),
 	);
 }
 
+/**
+ * Add ajax endpoint for loading player configs
+ */
 function flowplayer_ovp_ajax_load_players() {
 	$players = flowplayer_ovp_fetch_players();
 
-	wp_send_json_success($players);
+	wp_send_json_success( $players );
 }
 add_action( 'wp_ajax_flowplayer_ovp_load_players', 'flowplayer_ovp_ajax_load_players' );
 
+/**
+ * Fetch players from OVP API
+ */
 function flowplayer_ovp_fetch_players() {
 	$settings = flowplayer_ovp_get_settings();
 
@@ -94,16 +106,16 @@ function flowplayer_ovp_fetch_players() {
 		)
 	);
 
-	if( is_wp_error( $request ) ) {
-		return false; // Bail early
+	if ( is_wp_error( $request ) ) {
+		return false; // Bail early.
 	}
 	$body = wp_remote_retrieve_body( $request );
 	$data = json_decode( $body );
 
 	$players = [];
 
-	foreach ($data->players as $player) {
-		$players[$player->id] = $player->name;
+	foreach ( $data->players as $player ) {
+		$players[ $player->id ] = $player->name;
 	}
 
 	return $players;
