@@ -23,7 +23,7 @@ This plugin allows you to easily embed your videos from your Flowplayer Online V
 ## Configure
 
 1. Navigate to 'Settings' -> 'Flowplayer OVP'
-2. Find your Site ID and API key from your Flowplayer OVP workspace settings page. You can follow the link from the settigns page.
+2. Find your Site ID and API key from your Flowplayer OVP workspace settings page. You can follow the link from the settings page.
 3. Copy the Site ID and API key to corresponding fields
 4. Save settings
 
