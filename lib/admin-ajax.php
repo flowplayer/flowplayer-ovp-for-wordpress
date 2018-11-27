@@ -22,6 +22,13 @@ function flowplayer_ovp_query_attachments( $args ) {
 			$query['search'] = urlencode( sanitize_text_field( $_REQUEST['query']['s'] ) );
 		}
 
+		if ( isset( $_REQUEST['query']['post_parent'] ) ) {
+			$query['categories'] = urlencode( sanitize_text_field( $_REQUEST['query']['post_parent'] ) );
+
+			// Null this, since we've essentially hijacked this argument.
+			$_REQUEST['query']['post_parent'] = null;
+		}
+
 		$request = wp_remote_get(
 			sprintf(
 				'https://api.flowplayer.com/ovp/web/video/v2/site/%s.json?%s',
@@ -82,7 +89,7 @@ function flowplayer_ovp_video_to_media_attachment( $video, $categories ) {
 		'subtype'       => 'flowplayer',
 		'icon'          => $video->images->thumbnail_url,
 		'dateFormatted' => mysql2date( get_option( 'date_format' ), $video->created_at ),
-		'category'      => isset( $categories[ $video->categoryid ] ) ? $categories[ $video->categoryid ] : '',
+		'category'      => flowplayer_ovp_find_category_name( $video->categoryid, $categories ),
 		'externalId'    => $video->externalvideoid,
 		'tags'          => str_replace( ',', ', ', $video->tags ),
 		'editLink'      => false,
@@ -149,6 +156,16 @@ function flowplayer_ovp_fetch_players() {
 }
 
 /**
+ * Add ajax endpoint for loading categories
+ */
+function flowplayer_ovp_ajax_load_categories() {
+	$categories = flowplayer_ovp_fetch_categories();
+
+	wp_send_json_success( $categories );
+}
+add_action( 'wp_ajax_flowplayer_ovp_load_categories', 'flowplayer_ovp_ajax_load_categories' );
+
+/**
  * Fetch categories from OVP API
  */
 function flowplayer_ovp_fetch_categories() {
@@ -172,9 +189,11 @@ function flowplayer_ovp_fetch_categories() {
 
 	foreach ( $data->categories as $category ) {
 		if ( ! $category->hidden ) {
-			$categories[ $category->id ] = $category->name;
+			$categories[] = $category;
 		}
 	}
 
-	return $categories;
+	return flowplayer_ovp_nest_categories( $categories );
 }
+
+require_once( 'categories.php' );

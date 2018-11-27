@@ -2,8 +2,9 @@ var defaultMediaFrame = wp.media.view.MediaFrame.Post;
 
 // Extend the default media library frame to add a new tab
 wp.media.view.MediaFrame.Post = defaultMediaFrame.extend({
-	players: [],
-	playerSettings: null,
+	fp_players: [],
+	fp_playerSettings: null,
+	fp_categories: [],
 
 	initialize: function() {
 		defaultMediaFrame.prototype.initialize.apply( this, arguments );
@@ -29,18 +30,28 @@ wp.media.view.MediaFrame.Post = defaultMediaFrame.extend({
 		});
 
 		controller.states.add([ flowplayerLibrary ]);
-		controller.playerSettings = new Backbone.Model();
+		controller.fp_playerSettings = new Backbone.Model();
 
 		jQuery.post(ajaxurl, {
 			'action': 'flowplayer_ovp_load_players',
 		}, function(response) {
 			controller.setPlayers(response.data);
-			controller.playerSettings.set('fp_ovp_player', response.data[0]);
+			controller.fp_playerSettings.set('fp_ovp_player', response.data[0]);
+		});
+
+		jQuery.post(ajaxurl, {
+			'action': 'flowplayer_ovp_load_categories',
+		}, function(response) {
+			controller.setCategories(response.data);
 		});
 	},
 
 	setPlayers: function(players) {
-		this.players = players;
+		this.fp_players = players;
+	},
+
+	setCategories: function(categories) {
+		this.fp_categories = categories;
 	},
 
 	bindHandlers: function() {
@@ -64,6 +75,36 @@ wp.media.view.MediaFrame.Post = defaultMediaFrame.extend({
 
 		if( state.get('id') === 'flowplayer' ) {
 			var controller = this;
+
+			var categoryFilter = wp.media.view.AttachmentFilters.extend({
+				className: 'attachment-filters fp-attachment-filters',
+				createFilters: function() {
+					var filters = {};
+					_.each( controller.fp_categories || {}, function( category ) {
+						filters[ category.id ] = {
+							text: category.name,
+							props: {
+								uploadedTo: category.concatid,
+							}
+						};
+					});
+
+					filters.all = {
+						text: 'All',
+						props: {
+							uploadedTo: null
+						},
+						priority: 10
+					};
+					this.filters = filters;
+				}
+			})
+
+			browser.toolbar.set( 'categoryFilter', new categoryFilter({
+				controller: controller,
+				model:      browser.collection.props,
+				priority:   -80
+			}).render() );
 
 			browser.listenTo(selection, 'selection:single', function() {
 				controller.createFpSidebar(browser);
@@ -105,8 +146,8 @@ wp.media.view.MediaFrame.Post = defaultMediaFrame.extend({
 			}),
 			'flowplayer-settings':	new FlowplayerSettings({
 				priority: 120,
-				players: this.players,
-				model: this.playerSettings,
+				players: this.fp_players,
+				model: this.fp_playerSettings,
 			})
 		});
 	},
@@ -128,7 +169,7 @@ wp.media.view.MediaFrame.Post = defaultMediaFrame.extend({
 				var options = attachment.toJSON();
 				options.settings = state.display( attachment ).toJSON();
 
-				var player_id = controller.playerSettings.get('fp_ovp_player');
+				var player_id = controller.fp_playerSettings.get('fp_ovp_player');
 				var url = options.url + '&pi=' + player_id;
 
 				wp.media.post( 'send-link-to-editor', {

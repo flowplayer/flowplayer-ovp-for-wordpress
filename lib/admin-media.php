@@ -86,6 +86,9 @@ function flowplayer_ovp_print_media_templates() {
 		</label>
 
 	</script>
+	<style>
+		.fp-attachment-filters { width: auto !important; max-width: 100% !important; }
+	</style>
 	<?php
 }
 add_action( 'print_media_templates', 'flowplayer_ovp_print_media_templates' );
