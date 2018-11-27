@@ -11,7 +11,7 @@
  * @wordpress-plugin
  * Plugin Name: Flowplayer OVP
  * Description: Embed videos from Flowplayer online video platform directly into posts via WordPress media gallery
- * Version:     0.1.1
+ * Version:     0.1.2
  * Author:      Flowplayer ltd.
  * Author URI:  https://flowplayer.com/
  * Text Domain: flowplayer-ovp
