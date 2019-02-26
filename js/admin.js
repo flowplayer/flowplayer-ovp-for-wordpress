@@ -33,14 +33,14 @@ wp.media.view.MediaFrame.Post = defaultMediaFrame.extend({
 		controller.fp_playerSettings = new Backbone.Model();
 
 		jQuery.post(ajaxurl, {
-			'action': 'flowplayer_ovp_load_players',
+			'action': 'flowplayer_embed_load_players',
 		}, function(response) {
 			controller.setPlayers(response.data);
-			controller.fp_playerSettings.set('fp_ovp_player', response.data[0]);
+			controller.fp_playerSettings.set('fp_embed_player', response.data[0]);
 		});
 
 		jQuery.post(ajaxurl, {
-			'action': 'flowplayer_ovp_load_categories',
+			'action': 'flowplayer_embed_load_categories',
 		}, function(response) {
 			controller.setCategories(response.data);
 		});
@@ -169,7 +169,7 @@ wp.media.view.MediaFrame.Post = defaultMediaFrame.extend({
 				var options = attachment.toJSON();
 				options.settings = state.display( attachment ).toJSON();
 
-				var player_id = controller.fp_playerSettings.get('fp_ovp_player');
+				var player_id = controller.fp_playerSettings.get('fp_embed_player');
 				var url = options.url + '&pi=' + player_id;
 
 				wp.media.post( 'send-link-to-editor', {

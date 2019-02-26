@@ -1,4 +1,4 @@
-# Flowplayer OVP for WordPress
+# Flowplayer Platform Embed for WordPress
 
 This plugin allows you to easily embed your videos from your Flowplayer Online Video Platform account to your WordPress posts.
 
@@ -16,14 +16,14 @@ This plugin allows you to easily embed your videos from your Flowplayer Online V
 ### Manually through FTP
 
 1. Download the zip file
-2. Extract to the `flowplayer-ovp` directory to your computer
-3. Upload the `flowplayer-ovp` directory to your `wp-content/plugins` directory
+2. Extract to the `flowplayer-embed` directory to your computer
+3. Upload the `flowplayer-embed` directory to your `wp-content/plugins` directory
 4. Activate the plugin on the WordPress Plugins dashboard
 
 ## Configure
 
-1. Navigate to 'Settings' -> 'Flowplayer OVP'
-2. Find your Site ID and API key from your Flowplayer OVP workspace settings page. You can follow the link from the settings page.
+1. Navigate to 'Settings' -> 'Flowplayer Embed'
+2. Find your Site ID and API key from your Flowplayer app workspace settings page. You can follow the link from the settings page.
 3. Copy the Site ID and API key to corresponding fields
 4. Save settings
 

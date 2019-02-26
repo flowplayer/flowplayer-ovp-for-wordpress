@@ -7,9 +7,9 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Parse ajax queries
  */
-function flowplayer_ovp_query_attachments( $args ) {
+function flowplayer_embed_query_attachments( $args ) {
 	if ( isset( $_REQUEST['query']['flowplayer'] ) ) {
-		$settings = flowplayer_ovp_get_settings();
+		$settings = flowplayer_embed_get_settings();
 
 		// Fetch attachments.
 		$query = array(
@@ -43,12 +43,12 @@ function flowplayer_ovp_query_attachments( $args ) {
 		$body = wp_remote_retrieve_body( $request );
 		$data = json_decode( $body );
 
-		$categories = flowplayer_ovp_fetch_categories();
+		$categories = flowplayer_embed_fetch_categories();
 
 		// Map attachments to expected format.
 		$videos = array_map(
 			function( $video ) use ( $categories ) {
-				return flowplayer_ovp_video_to_media_attachment( $video, $categories );
+				return flowplayer_embed_video_to_media_attachment( $video, $categories );
 			},
 			$data->videos
 		);
@@ -58,12 +58,12 @@ function flowplayer_ovp_query_attachments( $args ) {
 
 	return $args;
 }
-add_filter( 'ajax_query_attachments_args', 'flowplayer_ovp_query_attachments', 99 );
+add_filter( 'ajax_query_attachments_args', 'flowplayer_embed_query_attachments', 99 );
 
 /**
  * Convert OVP API response video entity to WordPress attachment
  */
-function flowplayer_ovp_video_to_media_attachment( $video, $categories ) {
+function flowplayer_embed_video_to_media_attachment( $video, $categories ) {
 	return array(
 		'type'          => 'remote',
 		'id'            => $video->id,
@@ -89,7 +89,7 @@ function flowplayer_ovp_video_to_media_attachment( $video, $categories ) {
 		'subtype'       => 'flowplayer',
 		'icon'          => $video->images->thumbnail_url,
 		'dateFormatted' => mysql2date( get_option( 'date_format' ), $video->created_at ),
-		'category'      => flowplayer_ovp_find_category_name( $video->categoryid, $categories ),
+		'category'      => flowplayer_embed_find_category_name( $video->categoryid, $categories ),
 		'externalId'    => $video->externalvideoid,
 		'tags'          => str_replace( ',', ', ', $video->tags ),
 		'editLink'      => false,
@@ -119,18 +119,18 @@ function duration( $seconds_count ) {
 /**
  * Add ajax endpoint for loading player configs
  */
-function flowplayer_ovp_ajax_load_players() {
-	$players = flowplayer_ovp_fetch_players();
+function flowplayer_embed_ajax_load_players() {
+	$players = flowplayer_embed_fetch_players();
 
 	wp_send_json_success( $players );
 }
-add_action( 'wp_ajax_flowplayer_ovp_load_players', 'flowplayer_ovp_ajax_load_players' );
+add_action( 'wp_ajax_flowplayer_embed_load_players', 'flowplayer_embed_ajax_load_players' );
 
 /**
  * Fetch players from OVP API
  */
-function flowplayer_ovp_fetch_players() {
-	$settings = flowplayer_ovp_get_settings();
+function flowplayer_embed_fetch_players() {
+	$settings = flowplayer_embed_get_settings();
 
 	$request = wp_remote_get(
 		sprintf(
@@ -158,18 +158,18 @@ function flowplayer_ovp_fetch_players() {
 /**
  * Add ajax endpoint for loading categories
  */
-function flowplayer_ovp_ajax_load_categories() {
-	$categories = flowplayer_ovp_fetch_categories();
+function flowplayer_embed_ajax_load_categories() {
+	$categories = flowplayer_embed_fetch_categories();
 
 	wp_send_json_success( $categories );
 }
-add_action( 'wp_ajax_flowplayer_ovp_load_categories', 'flowplayer_ovp_ajax_load_categories' );
+add_action( 'wp_ajax_flowplayer_embed_load_categories', 'flowplayer_embed_ajax_load_categories' );
 
 /**
  * Fetch categories from OVP API
  */
-function flowplayer_ovp_fetch_categories() {
-	$settings = flowplayer_ovp_get_settings();
+function flowplayer_embed_fetch_categories() {
+	$settings = flowplayer_embed_get_settings();
 
 	$request = wp_remote_get(
 		sprintf(
@@ -193,7 +193,7 @@ function flowplayer_ovp_fetch_categories() {
 		}
 	}
 
-	return flowplayer_ovp_nest_categories( $categories );
+	return flowplayer_embed_nest_categories( $categories );
 }
 
 require_once( 'categories.php' );

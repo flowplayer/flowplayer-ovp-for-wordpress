@@ -1,6 +1,6 @@
 {
-    "name": "flowplayer/flowplayer-ovp",
-    "description": "Flowplayer OVP integration for WordPress",
+    "name": "flowplayer/flowplayer-embed",
+    "description": "Flowplayer Platform Embed for WordPress",
     "type": "wordpress-plugin",
     "license": "GPL-2.0+",
     "authors": [
