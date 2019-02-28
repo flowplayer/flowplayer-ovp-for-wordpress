@@ -29,7 +29,10 @@ wp.media.view.MediaFrame.Post = defaultMediaFrame.extend({
 			url:        '',
 		});
 
-		controller.states.add([ flowplayerLibrary ]);
+		// Show Flowplayer Embed only if there's embed selection available
+		if ( controller.states._byId.hasOwnProperty( 'embed' ) ) {
+			controller.states.add([ flowplayerLibrary ]);
+		}
 		controller.fp_playerSettings = new Backbone.Model();
 
 		jQuery.post(ajaxurl, {

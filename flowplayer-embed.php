@@ -28,6 +28,7 @@ if ( ! defined( 'WPINC' ) ) {
 $dir = dirname( __FILE__ );
 
 require_once( $dir . '/lib/embed.php' );
+require_once( $dir . '/block/block.php' );
 
 if ( is_admin() ) {
 	require_once( $dir . '/lib/settings.php' );
