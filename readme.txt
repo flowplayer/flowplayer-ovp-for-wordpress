@@ -29,6 +29,13 @@ Log in to your account in flowplayer.com handle all the video management, this p
 
 To embed video with classic editor click the "Add media" button and from the left side panel choose Add Flowplayer Embed.
 
+== Screenshots ==
+
+1. Simple configuration
+2. Embed using Gutenberg block
+3. Search and select video and player for embed directly inside WordPress
+4. Preview your embed in Gutenberg editor
+
 == Changelog ==
 = 0.2.0 - 28 Feb 2019 =
 * Introduce Gutenberg block
