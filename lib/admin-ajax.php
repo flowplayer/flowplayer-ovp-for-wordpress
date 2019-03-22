@@ -140,7 +140,7 @@ function flowplayer_embed_fetch_players() {
 		)
 	);
 
-	if ( is_wp_error( $request ) ) {
+	if ( wp_remote_retrieve_response_code( $request ) !== 200 ) {
 		return false; // Bail early.
 	}
 	$body = wp_remote_retrieve_body( $request );
@@ -179,7 +179,7 @@ function flowplayer_embed_fetch_categories() {
 		)
 	);
 
-	if ( is_wp_error( $request ) ) {
+	if ( wp_remote_retrieve_response_code( $request ) !== 200 ) {
 		return false; // Bail early.
 	}
 	$body = wp_remote_retrieve_body( $request );

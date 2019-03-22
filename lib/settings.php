@@ -101,3 +101,11 @@ function flowplayer_embed_get_settings() {
 	];
 }
 
+/**
+ * Check if settings exists
+ */
+function flowplayer_embed_is_configured() {
+	$settings = flowplayer_embed_get_settings();
+
+	return $settings['site_id'] !== '' && $settings['api_key'] !== '';
+}

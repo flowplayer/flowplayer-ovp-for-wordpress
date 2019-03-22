@@ -8,9 +8,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Enqueue admin js
  */
 function flowplayer_embed_scripts() {
-	$settings = flowplayer_embed_get_settings();
-
-	if ( $settings['site_id'] !== '' ) {
+	if ( flowplayer_embed_is_configured() ) {
 		wp_enqueue_script(
 			'flowplayer-embed-js',
 			plugin_dir_url( dirname( __FILE__ ) ) . 'js/admin.js',
@@ -26,6 +24,10 @@ add_action( 'print_media_templates', 'flowplayer_embed_scripts' );
  * Enqueue extra admin templates
  */
 function flowplayer_embed_print_media_templates() {
+	if( !flowplayer_embed_is_configured() ) {
+		return;
+	}
+
 	$players = flowplayer_embed_fetch_players();
 	?>
 	<script type="text/html" id="tmpl-flowplayer-display-details">
