@@ -1,16 +1,19 @@
 === Flowplayer Platform Embed ===
 Contributors: flowplayerorg, underdude
-Tags: flowplayer, embed
+Tags: flowplayer, video, mp4, hsl, webm, embed
 Requires at least: 4.7
 Tested up to: 5.1
 Stable tag: 0.2.0
 License: GPL-2.0+
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 
-Embed videos from Flowplayer online video platform directly into your content.
+Flowplayer/WordPress plugin is an extremely simple tool to embed videos on your WP site.
 
 == Description ==
-Embed videos from Flowplayer online video platform directly into your content. This plugin includes both Gutenberg block and support for classic editor.
+Flowplayer/WordPress plugin is an extremely simple tool to embed videos on your WP site. The videos are embedded directly on your pages without leaving Wordpress and without writing any HTML code. The plugin works seamlessly with both Gutenberg and the classic editor.
+
+Your videos are played with the best possible quality and speed regardless of the end-user device and the quality is automatically switched when the connection speed changes. The player design is highly customizable and minimalistic so that the video is the start of the show — not the player.
+
 
 == Installation ==
 = Configure API keys =
