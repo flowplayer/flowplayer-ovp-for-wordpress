@@ -67,7 +67,7 @@ function flowplayer_embed_settings_field_render( $args ) {
  * Render section
  */
 function flowplayer_embed_settings_section_callback() {
-	echo __( 'You can find these keys from your <a href="https://flowplayer.com/app/workspace/settings" target="blank">Flowplayer app workspace settings</a>, by clicking <em>API key</em> link from the top right corner.', 'flowplayer_embed' );
+	echo __( 'You can find these keys from your <a href="https://flowplayer.com/app/workspace/settings" target="blank">Flowplayer app workspace settings</a>.', 'flowplayer_embed' );
 }
 
 /**
