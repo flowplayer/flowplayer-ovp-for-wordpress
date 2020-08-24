@@ -131,7 +131,7 @@ class FlowplayerEmbedSelect extends Component {
 		return (
 			<div className="components-placeholder">
 				<Button
-					isLarge
+					isPrimary
 					className="editor-media-placeholder__button"
 					onClick={ this.openModal }
 				>
