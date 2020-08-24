@@ -17,6 +17,7 @@ const getFlowplayerMediaFrame = () => {
 					title: 'Add Flowplayer embed',
 					priority: 20,
 					router: 'empty',
+					content: 'browse',
 					toolbar: 'flowplayer',
 					filterable: false,
 					searchable: true,
