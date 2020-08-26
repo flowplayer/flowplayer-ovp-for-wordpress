@@ -12,7 +12,12 @@ function flowplayer_embed_find_category_name( $category_id, $categories ) {
  * Transfer flat category structure into nested one
  */
 function flowplayer_embed_nest_categories( $categories ) {
-	$parents = flowplayer_embed_children_of( $categories, '' );
+	$parents = array_filter(
+		$categories,
+		function( $cat ) {
+			return !property_exists( $cat, 'parent_id');
+		}
+	);
 
 	$categorytree = flowplayer_embed_recurse_child_categories( $categories, $parents );
 
@@ -45,7 +50,7 @@ function flowplayer_embed_children_of( $categories, $parentid ) {
 	return array_filter(
 		$categories,
 		function( $cat ) use ( $parentid ) {
-			return $cat->parentid == $parentid;
+			return $cat->parent_id == $parentid;
 		}
 	);
 }

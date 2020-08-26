@@ -13,9 +13,8 @@ function flowplayer_embed_query_attachments( $args ) {
 
 		// Fetch attachments.
 		$query = array(
-			'api_key'   => $settings['api_key'],
 			'page_size' => filter_var( $_REQUEST['query']['posts_per_page'], FILTER_SANITIZE_NUMBER_INT ),
-			'page'      => filter_var( $_REQUEST['query']['paged'], FILTER_SANITIZE_NUMBER_INT ),
+			'page'      => filter_var( $_REQUEST['query']['paged'], FILTER_SANITIZE_NUMBER_INT ) - 1,
 		);
 
 		if ( isset( $_REQUEST['query']['s'] ) ) {
@@ -31,9 +30,13 @@ function flowplayer_embed_query_attachments( $args ) {
 
 		$request = wp_remote_get(
 			sprintf(
-				'https://api.flowplayer.com/ovp/web/video/v2/site/%s.json?%s',
-				$settings['site_id'],
+				'https://api.flowplayer.com/platform/v3/videos?%s',
 				build_query( $query )
+			), array(
+				'headers' => array(
+					'Content-Type' => 'application/json',
+					'x-flowplayer-api-key' => $settings['api_key']
+				)
 			)
 		);
 
@@ -50,7 +53,7 @@ function flowplayer_embed_query_attachments( $args ) {
 			function( $video ) use ( $categories ) {
 				return flowplayer_embed_video_to_media_attachment( $video, $categories );
 			},
-			$data->videos
+			$data->assets
 		);
 
 		wp_send_json_success( $videos );
@@ -87,10 +90,10 @@ function flowplayer_embed_video_to_media_attachment( $video, $categories ) {
 		'menuOrder'     => 0,
 		'mime'          => 'remote/flowplayer',
 		'subtype'       => 'flowplayer',
-		'icon'          => $video->images->thumbnail_url,
+		'icon'          => $video->images[0]->url,
 		'dateFormatted' => mysql2date( get_option( 'date_format' ), $video->created_at ),
-		'category'      => flowplayer_embed_find_category_name( $video->categoryid, $categories ),
-		'externalId'    => $video->externalvideoid,
+		'category'      => flowplayer_embed_find_category_name( $video->category_id, $categories ),
+		'externalId'    => $video->id,
 		'tags'          => str_replace( ',', ', ', $video->tags ),
 		'editLink'      => false,
 		'nonces'        => array(
@@ -173,9 +176,13 @@ function flowplayer_embed_fetch_categories() {
 
 	$request = wp_remote_get(
 		sprintf(
-			'https://api.flowplayer.com/ovp/web/category/v2/site/%s.json?api_key=%s',
-			$settings['site_id'],
-			$settings['api_key']
+			'https://api.flowplayer.com/platform/v3/categories?%s',
+			build_query( array('page_size' => 100) )
+		), array(
+			'headers' => array(
+				'Content-Type' => 'application/json',
+				'x-flowplayer-api-key' => $settings['api_key']
+			)
 		)
 	);
 
@@ -187,7 +194,7 @@ function flowplayer_embed_fetch_categories() {
 
 	$categories = [];
 
-	foreach ( $data->categories as $category ) {
+	foreach ( $data->assets as $category ) {
 		if ( ! $category->hidden ) {
 			$categories[] = $category;
 		}
