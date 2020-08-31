@@ -32,6 +32,11 @@ function flowplayer_embed_query_attachments( $args ) {
 				return flowplayer_embed_fetch_playlists( $query );
 			}
 
+			if( $category === 'livestreams' ) {
+				// Pivot to playlist fetching and return early
+				return flowplayer_embed_fetch_livestreams( $query );
+			}
+
 			$query['categories'] = $category;
 		}
 
@@ -215,9 +220,19 @@ function flowplayer_embed_fetch_categories() {
 				'concatid' => 'playlists',
 				'name' => __( 'Playlists', 'flowplayer_embed' )
 			)
-		)
+		),
+		$settings['show_livestreams'] == 'on'
+			? array(
+				array(
+					'id' => 'livestreams',
+					'concatid' => 'livestreams',
+					'name' => __( 'Livestreams', 'flowplayer_embed' )
+				)
+			) 
+			: array()
 	);
 }
 
 require_once( 'categories.php' );
 require_once( 'playlists.php' );
+require_once( 'livestreams.php' );

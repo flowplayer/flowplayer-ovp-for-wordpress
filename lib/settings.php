@@ -48,6 +48,22 @@ function flowplayer_embed_settings_init() {
 		'flowplayer_embed_keys',
 		[ 'field_id' => 'flowplayer_embed_api_key' ]
 	);
+
+	add_settings_section(
+		'flowplayer_embed_livestreams',
+		__( 'Livestreams', 'flowplayer_embed' ),
+		'flowplayer_embed_settings_livestreams_section_callback',
+		'flowplayer_embed_settings'
+	);
+
+	add_settings_field(
+		'flowplayer_embed_show_livestreams',
+		__( 'Enable livestreams', 'flowplayer_embed' ),
+		'flowplayer_embed_settings_checkbox_render',
+		'flowplayer_embed_settings',
+		'flowplayer_embed_livestreams',
+		[ 'field_id' => 'flowplayer_embed_show_livestreams' ]
+	);
 }
 add_action( 'admin_init', 'flowplayer_embed_settings_init' );
 
@@ -64,10 +80,29 @@ function flowplayer_embed_settings_field_render( $args ) {
 }
 
 /**
+ * Renders single setting checkbox
+ */
+function flowplayer_embed_settings_checkbox_render( $args ) {
+	$options  = get_option( 'flowplayer_embed_settings' );
+	$field_id = $args['field_id'];
+	$defval   = is_array( $options ) && array_key_exists( $field_id, $options ) ? $options[ $field_id ] : '';
+	?>
+	<input type='checkbox' name='flowplayer_embed_settings[<?php print $field_id; ?>]' <?php if ($defval === 'on') echo 'checked="checked"'; ?>>
+	<?php
+}
+
+/**
  * Render section
  */
 function flowplayer_embed_settings_section_callback() {
 	echo __( 'You can find these keys from your <a href="https://flowplayer.com/app/workspace/settings" target="blank">Flowplayer app workspace settings</a>.', 'flowplayer_embed' );
+}
+
+/**
+ * Render section
+ */
+function flowplayer_embed_settings_livestreams_section_callback() {
+	echo __( 'Since livestreams are available only for Enterprise level users, please enable them separately to show them in embed dialog.', 'flowplayer_embed' );
 }
 
 /**
@@ -98,6 +133,7 @@ function flowplayer_embed_get_settings() {
 	return [
 		'site_id' => array_key_exists( 'flowplayer_embed_site_id', $options ) ? $options['flowplayer_embed_site_id'] : '',
 		'api_key' => array_key_exists( 'flowplayer_embed_api_key', $options ) ? $options['flowplayer_embed_api_key'] : '',
+		'show_livestreams' => array_key_exists( 'flowplayer_embed_show_livestreams', $options ) ? $options['flowplayer_embed_show_livestreams'] : '',
 	];
 }
 
