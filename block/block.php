@@ -21,7 +21,7 @@ function flowplayer_embed_block_editor_assets() {
 			'wp-element',
 			'wp-i18n',
 		),
-		'0.2.0',
+		'0.3.0',
 		true
 	);
 }

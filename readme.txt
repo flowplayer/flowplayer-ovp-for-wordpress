@@ -2,8 +2,8 @@
 Contributors: flowplayerorg, underdude
 Tags: flowplayer, video, mp4, hsl, webm, embed
 Requires at least: 4.7
-Tested up to: 5.1
-Stable tag: 0.2.0
+Tested up to: 5.5
+Stable tag: 0.3.0
 License: GPL-2.0+
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 
@@ -40,5 +40,10 @@ To embed video with classic editor click the "Add media" button and from the lef
 4. Preview your embed in Gutenberg editor
 
 == Changelog ==
+= 0.3.0 - 31 Aug 2020 =
+* Add embedding playlists
+* Add embedding livestreams (only for Enterprise users)
+* Fix issue where the browse dialog was left in empty state
+
 = 0.2.0 - 28 Feb 2019 =
 * Introduce Gutenberg block

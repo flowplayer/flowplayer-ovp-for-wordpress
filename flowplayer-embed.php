@@ -6,12 +6,12 @@
  * @author    Janne Ala-Äijälä <janne.ala-aijala@flowplayer.com>
  * @license   GPL-2.0+
  * @link      https://flowplayer.com/
- * @copyright 2018 Flowplayer Ltd
+ * @copyright 2020 Flowplayer Ltd
  *
  * @wordpress-plugin
  * Plugin Name: Flowplayer Platform Embed
  * Description: Embed videos from Flowplayer online video platform directly into posts via WordPress media gallery
- * Version:     0.2.0
+ * Version:     0.3.0
  * Author:      Flowplayer ltd.
  * Author URI:  https://flowplayer.com/
  * Text Domain: flowplayer_embed
