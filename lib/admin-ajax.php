@@ -22,10 +22,17 @@ function flowplayer_embed_query_attachments( $args ) {
 		}
 
 		if ( isset( $_REQUEST['query']['post_parent'] ) ) {
-			$query['categories'] = urlencode( sanitize_text_field( $_REQUEST['query']['post_parent'] ) );
+			$category = urlencode( sanitize_text_field( $_REQUEST['query']['post_parent'] ) );
 
 			// Null this, since we've essentially hijacked this argument.
 			$_REQUEST['query']['post_parent'] = null;
+
+			if( $category === 'playlists' ) {
+				// Pivot to playlist fetching and return early
+				return flowplayer_embed_fetch_playlists( $query );
+			}
+
+			$query['categories'] = $category;
 		}
 
 		$request = wp_remote_get(
@@ -200,7 +207,17 @@ function flowplayer_embed_fetch_categories() {
 		}
 	}
 
-	return flowplayer_embed_nest_categories( $categories );
+	return array_merge(
+		flowplayer_embed_nest_categories( $categories ),
+		array(
+			array(
+				'id' => 'playlists',
+				'concatid' => 'playlists',
+				'name' => __( 'Playlists', 'flowplayer_embed' )
+			)
+		)
+	);
 }
 
 require_once( 'categories.php' );
+require_once( 'playlists.php' );

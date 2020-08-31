@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 /**
  * Find category name based on category id
  */
