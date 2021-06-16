@@ -2,7 +2,7 @@
 Contributors: flowplayerorg, underdude
 Tags: flowplayer, video, mp4, hsl, webm, embed
 Requires at least: 4.7
-Tested up to: 5.5
+Tested up to: 5.8
 Stable tag: 0.3.0
 License: GPL-2.0+
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
